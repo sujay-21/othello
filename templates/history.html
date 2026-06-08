@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Othello – Match History</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div id="history-page">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="history-header">
+      <a href="/" class="btn btn-ghost btn-sm" style="margin-bottom:24px; display:inline-flex;">← Back to Menu</a>
+      <h1>Match History</h1>
+      <p class="subtitle" style="margin-top:8px;">Statistics &amp; Past Games</p>
+    </div>
+
+    <!-- Statistics Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-total">—</div>
+        <div class="stat-label">Total Games</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-pvp">—</div>
+        <div class="stat-label">PvP Games</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-pvai">—</div>
+        <div class="stat-label">PvAI Games</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-black">—</div>
+        <div class="stat-label">Black Wins</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-white">—</div>
+        <div class="stat-label">White Wins</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-draws">—</div>
+        <div class="stat-label">Draws</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-human">—</div>
+        <div class="stat-label">Human Wins (AI)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-ai">—</div>
+        <div class="stat-label">AI Wins</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-avg">—</div>
+        <div class="stat-label">Avg Moves</div>
+      </div>
+    </div>
+
+    <!-- Games Table -->
+    <div class="games-table-container">
+      <table class="games-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mode</th>
+            <th>Winner</th>
+            <th>Score (B–W)</th>
+            <th>Moves</th>
+            <th>Ended</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+          <tr>
+            <td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">Loading…</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <div class="empty-icon">♟</div>
+        <h3 style="font-family:'Cinzel',serif; font-size:1rem; margin-bottom:8px;">No games yet</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Play a game and it'll appear here.</p>
+        <a href="/" class="btn btn-primary btn-sm" style="margin-top:20px;">Play Now</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/static/js/history.js"></script>
+</body>
+</html>

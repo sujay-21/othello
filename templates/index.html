@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Othello – The Classic Strategy Game</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ═══ HOME PAGE ════════════════════════════════════════════ -->
+<div id="home-page" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px 24px;">
+
+  <header class="home-header">
+    <span class="ornament">◆  EST. 1971  ◆</span>
+    <h1>Othello</h1>
+    <p class="tagline">A minute to learn. A lifetime to master.</p>
+  </header>
+
+  <!-- Game Mode Cards -->
+  <div class="mode-cards">
+    <div class="mode-card" onclick="launchGame('pvp')">
+      <span class="icon">⬤⬜</span>
+      <h3>Player vs Player</h3>
+      <p>Challenge a friend on the same device</p>
+    </div>
+    <div class="mode-card" onclick="launchGame('pvai')">
+      <span class="icon">🤖</span>
+      <h3>Player vs AI</h3>
+      <p>Face the Minimax engine. Can you outwit it?</p>
+    </div>
+  </div>
+
+  <!-- Secondary Links -->
+  <div class="secondary-links">
+    <button class="btn btn-secondary btn-sm" onclick="openRules()">📜 Game Rules</button>
+    <a href="/history" class="btn btn-ghost btn-sm">📊 Match History</a>
+  </div>
+
+</div>
+
+<!-- ═══ GAME PAGE ════════════════════════════════════════════ -->
+<div id="game-page" style="display:none;">
+  <div style="max-width:1000px; margin:0 auto; padding:20px 24px;">
+
+    <!-- Top Nav -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <button class="btn btn-ghost btn-sm" onclick="goHome()">← Menu</button>
+      <span id="game-mode-label" class="subtitle" style="letter-spacing:0.2em;">—</span>
+      <button class="btn btn-secondary btn-sm" onclick="openRules()">Rules</button>
+    </div>
+
+    <!-- Game Layout -->
+    <div class="game-layout">
+
+      <!-- Black Player Panel -->
+      <div class="player-panel black-panel active">
+        <div class="player-disc"></div>
+        <div class="player-name">Black</div>
+        <div class="player-score" id="black-score">2</div>
+        <div class="turn-indicator" id="black-turn-ind">Your Turn</div>
+      </div>
+
+      <!-- Board + Status -->
+      <div class="board-wrapper">
+        <div class="board-container">
+          <div id="game-board"></div>
+
+          <!-- Game Over Overlay -->
+          <div id="game-over-overlay">
+            <div class="winner-text" id="winner-text">Black Wins!</div>
+            <div class="final-scores" id="final-scores"></div>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+              <button class="btn btn-primary btn-sm" onclick="restartGame()">Play Again</button>
+              <button class="btn btn-ghost btn-sm" onclick="goHome()">Main Menu</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Thinking / Status -->
+        <div class="ai-thinking" id="ai-thinking">
+          AI is thinking
+          <div class="dot-blink">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="status-bar" id="status-bar">Starting…</div>
+      </div>
+
+      <!-- White Player Panel -->
+      <div class="player-panel white-panel">
+        <div class="player-disc"></div>
+        <div class="player-name" id="white-player-name">White</div>
+        <div class="player-score" id="white-score">2</div>
+        <div class="turn-indicator" id="white-turn-ind">Your Turn</div>
+      </div>
+
+      <!-- Controls Panel (spans full width below) -->
+      <div class="controls-panel" style="grid-column: 1 / -1;">
+        <div class="section-label">Controls</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm" id="btn-undo" onclick="undoMove()" disabled>↩ Undo</button>
+          <button class="btn btn-secondary btn-sm" onclick="restartGame()">↺ Restart</button>
+          <button class="btn btn-danger btn-sm" onclick="goHome()">✕ Quit</button>
+        </div>
+      </div>
+
+    </div><!-- /game-layout -->
+  </div>
+</div>
+
+<!-- ═══ RULES MODAL ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="rules-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRules()" aria-label="Close">✕</button>
+    <h2 style="margin-bottom:6px;">Game Rules</h2>
+    <p class="subtitle" style="margin-bottom:0;">How to play Othello</p>
+
+    <ul class="rules-list">
+      <li><span class="rule-num">01</span>The board is 8 × 8. Four discs are placed in the centre at the start.</li>
+      <li><span class="rule-num">02</span>Black always moves first.</li>
+      <li><span class="rule-num">03</span>A move is valid only if it traps at least one opponent disc between your new disc and another of your discs.</li>
+      <li><span class="rule-num">04</span>All trapped opponent discs are flipped to your colour.</li>
+      <li><span class="rule-num">05</span>If you have no valid move, your turn is passed to your opponent.</li>
+      <li><span class="rule-num">06</span>The game ends when the board is full or neither player can move.</li>
+      <li><span class="rule-num">07</span>The player with the most discs wins.</li>
+      <li><span class="rule-num">08</span>Green dots indicate squares where you can legally play.</li>
+    </ul>
+
+    <div style="margin-top:24px; text-align:center;">
+      <button class="btn btn-primary btn-sm" onclick="closeRules()">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pass toast -->
+<div class="pass-toast" id="pass-toast">Turn passed!</div>
+
+<script src="/static/js/game.js"></script>
+<script>
+  function launchGame(gameMode) {
+    document.getElementById('home-page').style.display = 'none';
+    const label = document.getElementById('game-mode-label');
+    if (label) label.textContent = gameMode === 'pvp' ? 'Player vs Player' : 'Player vs AI';
+
+    // Update white player label in PvAI
+    const whiteName = document.getElementById('white-player-name');
+    if (whiteName) whiteName.textContent = gameMode === 'pvai' ? 'AI (White)' : 'White';
+
+    startGame(gameMode);
+  }
+
+  function openRules()  { document.getElementById('rules-modal').classList.add('open'); }
+  function closeRules() { document.getElementById('rules-modal').classList.remove('open'); }
+
+  // Close modal on overlay click
+  document.getElementById('rules-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeRules();
+  });
+</script>
+</body>
+</html>
